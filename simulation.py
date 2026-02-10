@@ -2,6 +2,7 @@ import pygame, sys, random
 from grid import Grid
 from particle import SandParticle
 from particle import RockParticle
+from particle import WaterParticle
 
 class Simulation:
 	def __init__(self, width, height, cell_size):
@@ -20,6 +21,8 @@ class Simulation:
 				self.grid.add_particle(row, column, SandParticle)
 		elif self.mode == "rock":
 			self.grid.add_particle(row, column, RockParticle)
+		elif self.mode == "water":
+			self.grid.add_particle(row, column, WaterParticle)
 
 	def remove_particle(self, row, column):
 		self.grid.remove_particle(row, column)
@@ -34,6 +37,11 @@ class Simulation:
 			for column in column_range:
 				particle = self.grid.get_cell(row, column)
 				if isinstance(particle, SandParticle):
+					new_pos = particle.update(self.grid, row, column)
+					if new_pos != (row, column):
+						self.grid.set_cell(new_pos[0], new_pos[1], particle)
+						self.grid.remove_particle(row, column)
+				elif isinstance(particle, WaterParticle):
 					new_pos = particle.update(self.grid, row, column)
 					if new_pos != (row, column):
 						self.grid.set_cell(new_pos[0], new_pos[1], particle)
@@ -61,6 +69,9 @@ class Simulation:
 		elif event.key == pygame.K_r:
 			print("Rock Mode")
 			self.mode = "rock"
+		elif event.key == pygame.K_w:
+			print("Water Mode")
+			self.mode = "water"
 		elif event.key == pygame.K_e:
 			print("Eraser Mode")
 			self.mode = "erase"
@@ -97,6 +108,8 @@ class Simulation:
 			color = (100, 100, 100)
 		elif self.mode == "sand":
 			color = (185, 142, 66)
+		elif self.mode == "water":
+			color = (0, 150, 255)
 		elif self.mode == "erase":
 			color = (255, 105, 180)
 
