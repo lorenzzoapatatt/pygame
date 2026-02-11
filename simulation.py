@@ -36,16 +36,20 @@ class Simulation:
 
 			for column in column_range:
 				particle = self.grid.get_cell(row, column)
-				if isinstance(particle, SandParticle):
+				if isinstance(particle, SandParticle) or isinstance(particle, WaterParticle):
 					new_pos = particle.update(self.grid, row, column)
 					if new_pos != (row, column):
-						self.grid.set_cell(new_pos[0], new_pos[1], particle)
-						self.grid.remove_particle(row, column)
-				elif isinstance(particle, WaterParticle):
-					new_pos = particle.update(self.grid, row, column)
-					if new_pos != (row, column):
-						self.grid.set_cell(new_pos[0], new_pos[1], particle)
-						self.grid.remove_particle(row, column)
+						new_r, new_c = new_pos
+						target = self.grid.get_cell(new_r, new_c)
+						# If target is empty, move into it
+						if target is None:
+							self.grid.set_cell(new_r, new_c, particle)
+							self.grid.remove_particle(row, column)
+						else:
+							# If current particle is denser than the target, swap places
+							if hasattr(particle, 'density') and hasattr(target, 'density') and particle.density > target.density:
+								self.grid.set_cell(new_r, new_c, particle)
+								self.grid.set_cell(row, column, target)
 
 	def restart(self):
 		self.grid.clear()
