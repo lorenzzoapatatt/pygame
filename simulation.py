@@ -44,7 +44,13 @@ class Simulation:
 				if particle is None:
 					continue
 
-				# 💤 Se está dormindo, ignora
+				# 🔽 SEMPRE verificar gravidade (mesmo dormindo)
+				if hasattr(particle, "density"):
+					if self.grid.is_cell_empty(row + 1, column):
+						particle.sleeping = False
+						particle.sleep_counter = 0
+
+				# 💤 Se está dormindo e não pode cair → ignora
 				if hasattr(particle, "sleeping") and particle.sleeping:
 					continue
 
@@ -55,26 +61,24 @@ class Simulation:
 						new_r, new_c = new_pos
 						target = self.grid.get_cell(new_r, new_c)
 
-						# Move se vazio
 						if target is None:
 							self.grid.set_cell(new_r, new_c, particle)
 							self.grid.remove_particle(row, column)
 
-						# Swap por densidade
 						else:
 							if hasattr(particle, 'density') and hasattr(target, 'density'):
 								if particle.density > target.density:
 									self.grid.set_cell(new_r, new_c, particle)
 									self.grid.set_cell(row, column, target)
 
-						# 🔔 Acorda partícula e vizinhos
+						# Se moveu → acorda
 						particle.sleep_counter = 0
 						particle.sleeping = False
 						self.wake_neighbors(new_r, new_c)
 
 					else:
-						# Não moveu → aumenta contador
-						if hasattr(particle, "sleep_counter"):
+						# 🔹 Só entra em sleep se estiver estável verticalmente
+						if not self.grid.is_cell_empty(row + 1, column):
 							particle.sleep_counter += 1
 
 							if particle.sleep_counter > particle.sleep_threshold:

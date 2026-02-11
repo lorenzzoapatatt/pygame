@@ -7,7 +7,7 @@ pygame.mouse.set_visible(False)
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 CELL_SIZE = 6
-FPS = 120
+FPS = 60
 GREY = (29, 29, 29)
 
 window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
