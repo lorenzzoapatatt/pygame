@@ -2,6 +2,7 @@ import random
 import colorsys
 
 class SandParticle:
+	#Cor
 	def __init__(self):
 		self.color = random_color((0.1, 0.12), (0.5, 0.7), (0.7, 0.9))
 
@@ -21,10 +22,12 @@ class SandParticle:
 		return row, column
 
 class RockParticle:
+	#Cor
 	def __init__(self):
 		self.color = random_color((0.0, 0.1), (0.1, 0.3), (0.3, 0.5))
 
 class WaterParticle:
+	#Cor
 	def __init__(self):
 		self.color = random_color((0.55, 0.65), (0.6, 0.8), (0.7, 0.95))
 
@@ -48,6 +51,7 @@ class WaterParticle:
 		
 		return row, column
 
+#Cor random
 def random_color(hue_range, saturation_range, value_range):
 	hue = random.uniform(*hue_range)
 	saturation = random.uniform(*saturation_range)
