@@ -88,7 +88,7 @@ class WaterParticle:
 	def __init__(self):
 		# 💤 Sistema de repouso
 		self.sleeping = False
-		self.sleep_counter = 0
+		self.sleep_counter = 2
 		self.sleep_threshold = 5  # frames parado antes de dormir
 
 		self.color = random_color((0.55, 0.65), (0.6, 0.8), (0.7, 0.95))
